@@ -1,39 +1,47 @@
 (function() {
 
 	$displayTime = document.querySelector('.color-clock-time');
+	$displayTime.addEventListener('mouseenter', showHexColor);
+	$displayTime.addEventListener('mouseleave', displayCurrentTime);
 	$secondStatus = document.querySelector('.color-clock-status');
+	$bodyColor = document.querySelector('body');
 	var displayTime = [];
-	var backgroundColorHex = '000000';
 	var hexTime = '';
 	var colors = [];
+	var currentTime = '';
+	var hover = false;
+
+	function showHexColor() {
+		$displayTime.textContent = colors[0] + ':' + colors[1] + ':' + colors[2];
+		hover = true;
+	}
 	
 	function generateCurrentTime() {
 		var currentDate = new Date();
-		var displayTime = [currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds()];
+		displayTime = [currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds()];
 		currentSecondsPercentage(displayTime[2]);
 		for (var i = 0; i < displayTime.length; i++) {
 			if (displayTime[i] < 10) {
 				displayTime[i] = '0' + displayTime[i];
 			}
 		}
-		var currentTime = ('' + displayTime[0] + ':' + displayTime[1] + ':' + displayTime[2]);
-		logCurrentTimeEverySecond(currentTime);
+		currentTime = (displayTime[0] + ':' + displayTime[1] + ':' + displayTime[2]);
+		if (hover === true) {
+				showHexColor();
+			} else {
+				displayCurrentTime(currentTime);	
+			}
 	};
 
-	function logCurrentTimeEverySecond(time) {
-		window.setInterval(function() {
-			displayCurrentTime(time);
+	window.setInterval(function() {
 			generateCurrentTime();
-			changeBackgroundColor();
 			currentSecondsPercentage(displayTime[2]);
-			backgroundColorHex = '' + displayTime[0] + displayTime[1] + displayTime[3];
-			console.log(backgroundColorHex);
+			changeBackgroundColor();
 		}, 1000);
-		displayCurrentTime(time);
-	}
 
-	function displayCurrentTime(time) {
-		$displayTime.innerHTML = time;
+	function displayCurrentTime() {
+		$displayTime.innerHTML = currentTime;
+		hover = false;
 	}
 
 	function currentSecondsPercentage(seconds) {
@@ -42,13 +50,16 @@
 	}
 
 	function timeToHexConversion() {
-		for (var i = 0; i < displayTime.length; i++) {
-			displayTime = displayTime[i]
-		}
+		colors[0] = ('0' + Number(displayTime[0]).toString(16)).slice(-2);
+		colors[1] = ('0' + Number(displayTime[1]).toString(16)).slice(-2);
+		colors[2] = ('0' + Number(displayTime[2]).toString(16)).slice(-2);
+		hexTime = colors[0] + colors[1] + colors[2];
+		console.log(hexTime);
+		return hexTime;
 	}
 
 	function changeBackgroundColor() {
-		document.querySelector('body').style.backgroundColor = '#' + timeToHexConversion();
+		$bodyColor.style.backgroundColor = '#' + timeToHexConversion();
 	}
 
 	generateCurrentTime();
