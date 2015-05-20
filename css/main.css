@@ -1,0 +1,17 @@
+body {
+	width: 100%;
+	background-color: gray;
+	color: white;
+	text-align: center;
+}
+
+.color-clock-time {
+	width: 20%;
+	margin: auto;
+	margin-top: 20%;
+	font-size: 3em;
+}
+
+.color-clock-status {
+	color: white;
+}
