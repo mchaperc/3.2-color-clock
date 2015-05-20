@@ -10,27 +10,18 @@
 	var colors = [];
 	var currentTime = '';
 	var hover = false;
-
-	function showHexColor() {
-		$displayTime.textContent = colors[0] + ':' + colors[1] + ':' + colors[2];
-		hover = true;
-	}
 	
 	function generateCurrentTime() {
 		var currentDate = new Date();
 		displayTime = [currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds()];
 		currentSecondsPercentage(displayTime[2]);
 		for (var i = 0; i < displayTime.length; i++) {
-			if (displayTime[i] < 10) {
-				displayTime[i] = '0' + displayTime[i];
-			}
+			displayTime[i] < 10 ? displayTime[i] = '0' + displayTime[i] : false;
 		}
 		currentTime = (displayTime[0] + ':' + displayTime[1] + ':' + displayTime[2]);
-		if (hover === true) {
-				showHexColor();
-			} else {
-				displayCurrentTime(currentTime);	
-			}
+		
+		hover === true ? showHexColor() : displayCurrentTime();
+
 	};
 
 	window.setInterval(function() {
@@ -38,6 +29,11 @@
 			currentSecondsPercentage(displayTime[2]);
 			changeBackgroundColor();
 		}, 1000);
+
+	function showHexColor() {
+		$displayTime.textContent = colors[0] + ':' + colors[1] + ':' + colors[2];
+		hover = true;
+	}
 
 	function displayCurrentTime() {
 		$displayTime.innerHTML = currentTime;
@@ -63,5 +59,6 @@
 	}
 
 	generateCurrentTime();
+	changeBackgroundColor();
 
 })();
